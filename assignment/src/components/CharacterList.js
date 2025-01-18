@@ -1,23 +1,35 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@apollo/client";
 import { GET_CHARACTERS } from "../context/MainContext";
 import { useFilters } from "../components/Filter";
 import { dynamicSort } from "../components/Sort";
 import { useTranslation } from "react-i18next";
+import InfiniteScroll from "react-infinite-scroll-component";
 import styles from "../style/home.module.css";
 
 const CharacterList = () => {
-  const { loading, error, data } = useQuery(GET_CHARACTERS);
+  const { loading, error, data, fetchMore } = useQuery(GET_CHARACTERS, {
+    variables: { page: 1 }, // Initial page
+  });
   const { filters } = useFilters();
   const { t } = useTranslation();
 
-  const [sortOrder, setSortOrder] = useState("asc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [sortOrder, setSortOrder] = React.useState("asc");
+
+  const fetchMoreData = () => {
+    if (data?.characters?.info?.next) {
+      fetchMore({
+        variables: {
+          page: data.characters.info.next, // Fetch the next page directly from the API
+        },
+      });
+    }
+  };
 
   if (loading) return <p>{t("loading")}</p>;
   if (error) return <p>{t("error")}: {error.message}</p>;
 
+  // Filter and sort characters
   const filteredCharacters = data.characters.results.filter((character) => {
     return (
       (filters.status === "" || character.status === filters.status) &&
@@ -27,24 +39,8 @@ const CharacterList = () => {
 
   const sortedCharacters = filteredCharacters.sort(dynamicSort(["name", "origin"], sortOrder));
 
-  const lastIndex = currentPage * itemsPerPage;
-  const firstIndex = lastIndex - itemsPerPage;
-  const currentItems = sortedCharacters.slice(firstIndex, lastIndex);
-
   const handleSort = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-  };
-
-  const nextPage = () => {
-    if (currentPage < Math.ceil(sortedCharacters.length / itemsPerPage)) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
   };
 
   return (
@@ -55,47 +51,47 @@ const CharacterList = () => {
         </button>
       </div>
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>{t("name")}</th>
-            <th>{t("status")}</th>
-            <th>{t("species")}</th>
-            <th>{t("gender")}</th>
-            <th>{t("origin")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.map((character) => (
-            <tr key={character.name}>
-              <td>{character.name}</td>
-              <td>{character.status}</td>
-              <td>{character.species}</td>
-              <td>{character.gender}</td>
-              <td>{character.origin.name}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className={styles.pagination}>
-        <button
-          className={styles.PaginationButton}
-          onClick={prevPage}
-          disabled={currentPage === 1}
+      <div
+        id="scrollableDiv"
+        style={{
+          height: "400px",
+          overflow: "auto",
+          display: "flex",
+          flexDirection: "column-reverse", // Keep the scroll bar at the bottom
+        }}
+      >
+        <InfiniteScroll
+          dataLength={sortedCharacters.length}
+          next={fetchMoreData}
+          style={{ display: "flex", flexDirection: "column-reverse" }}
+          inverse={true} // Items load from the bottom
+          hasMore={data?.characters?.info?.next !== null} // Check if there's more data
+          loader={<h4>{t("Loading...")}</h4>}
+          scrollableTarget="scrollableDiv"
         >
-          {t("previous")}
-        </button>
-        <span>
-          {t("page")} {currentPage} {t("of")} {Math.ceil(sortedCharacters.length / itemsPerPage)}
-        </span>
-        <button
-          className={styles.PaginationButton}
-          onClick={nextPage}
-          disabled={currentPage === Math.ceil(sortedCharacters.length / itemsPerPage)}
-        >
-          {t("next")}
-        </button>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>{t("Name")}</th>
+                <th>{t("status")}</th>
+                <th>{t("species")}</th>
+                <th>{t("gender")}</th>
+                <th>{t("origin")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedCharacters.map((character) => (
+                <tr key={character.name}>
+                  <td>{character.name}</td>
+                  <td>{character.status}</td>
+                  <td>{character.species}</td>
+                  <td>{character.gender}</td>
+                  <td>{character.origin.name}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </InfiniteScroll>
       </div>
     </div>
   );

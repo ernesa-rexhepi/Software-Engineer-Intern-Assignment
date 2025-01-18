@@ -8,7 +8,7 @@ const Home = () => {
   const { t } = useTranslation();
 
   return (
-    <div>
+    <div >
       <h1 className={styles.title}>{t("title")}</h1>
       <FilterProvider>
         <FilterControls />
