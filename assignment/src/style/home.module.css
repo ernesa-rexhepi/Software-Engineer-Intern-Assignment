@@ -48,11 +48,19 @@
 color: white;
 border: 2px solid #00b08b ;
   }
+  
   .Sort{
     color: white;
 border: 2px solid #00b08b ;
 width: 200px;
 height: 50px;
+  }
+  .pagination{
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 20px; 
+    gap: 10px; 
   }
   .PaginationButton{
     height: 50px;
@@ -61,4 +69,29 @@ height: 50px;
     font-size: 15px;
     border: 2px solid #00b08b ;
 
+  }
+  .LanguageSection{
+   display: flex;
+   color:white;
+   margin-left: 20px;
+display: flex;
+justify-content: center; 
+align-items: center; 
+  }
+  .LanguageSwitcher{
+    color:white;
+    border:2px solid#00b08b ;
+     margin-left: 10px;
+     width:100px;
+  }
+  .footerContent{
+    color:white;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+   
+  }
+  .footer{
+    border-top: 3px solid #00b08b;
+    border-bottom: 3px solid #00b08b;
   }
