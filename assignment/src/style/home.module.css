@@ -16,7 +16,7 @@
   .table {
     width: 100%;
     border-collapse: collapse;
-    margin: 0 auto;
+    margin: 20px auto;
   }
   
   .table th, .table td {
@@ -47,4 +47,18 @@
   font-size: 15px;
 color: white;
 border: 2px solid #00b08b ;
+  }
+  .Sort{
+    color: white;
+border: 2px solid #00b08b ;
+width: 200px;
+height: 50px;
+  }
+  .PaginationButton{
+    height: 50px;
+    width: 100px;
+    color: white;
+    font-size: 15px;
+    border: 2px solid #00b08b ;
+
   }
