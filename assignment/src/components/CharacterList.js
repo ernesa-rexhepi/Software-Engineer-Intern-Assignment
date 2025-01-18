@@ -56,17 +56,14 @@ const CharacterList = () => {
         style={{
           height: "400px",
           overflow: "auto",
-          display: "flex",
-          flexDirection: "column-reverse", // Keep the scroll bar at the bottom
         }}
       >
         <InfiniteScroll
           dataLength={sortedCharacters.length}
           next={fetchMoreData}
-          style={{ display: "flex", flexDirection: "column-reverse" }}
-          inverse={true} // Items load from the bottom
+          inverse={false} // Data loads from top
           hasMore={data?.characters?.info?.next !== null} // Check if there's more data
-          loader={<h4>{t("Loading...")}</h4>}
+          loader={<h4>{t("Loading...")}</h4>} // Loader at the bottom
           scrollableTarget="scrollableDiv"
         >
           <table className={styles.table}>
