@@ -10,8 +10,10 @@
     "ajv": "^8.17.1",
     "ajv-keywords": "^5.1.0",
     "graphql": "^16.10.0",
+    "i18next": "^24.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-i18next": "^15.4.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
