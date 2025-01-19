@@ -7,8 +7,8 @@ const client = new ApolloClient({
 });
 
 export const GET_CHARACTERS = gql`
-  query Characters {
-    characters {
+  query Characters($page: Int, $status: String, $species: String) {
+    characters(page: $page, filter: {status: $status, species: $species}) {
       results {
         name
         species
@@ -18,8 +18,14 @@ export const GET_CHARACTERS = gql`
           name
         }
       }
+      info {
+        next
+        prev
+      }
     }
   }
 `;
+
+
 
 export default client;
