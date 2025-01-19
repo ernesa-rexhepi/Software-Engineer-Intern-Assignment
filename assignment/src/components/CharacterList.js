@@ -9,7 +9,7 @@ import styles from "../style/home.module.css";
 
 const CharacterList = () => {
   const { loading, error, data, fetchMore } = useQuery(GET_CHARACTERS, {
-    variables: { page: 1 }, // Initial page
+    variables: { page: 1 }, 
   });
   const { filters } = useFilters();
   const { t } = useTranslation();
@@ -20,7 +20,7 @@ const CharacterList = () => {
     if (data?.characters?.info?.next) {
       fetchMore({
         variables: {
-          page: data.characters.info.next, // Fetch the next page directly from the API
+          page: data.characters.info.next, 
         },
       });
     }
@@ -29,7 +29,7 @@ const CharacterList = () => {
   if (loading) return <p>{t("loading")}</p>;
   if (error) return <p>{t("error")}: {error.message}</p>;
 
-  // Filter and sort characters
+  
   const filteredCharacters = data.characters.results.filter((character) => {
     return (
       (filters.status === "" || character.status === filters.status) &&
@@ -61,9 +61,9 @@ const CharacterList = () => {
         <InfiniteScroll
           dataLength={sortedCharacters.length}
           next={fetchMoreData}
-          inverse={false} // Data loads from top
-          hasMore={data?.characters?.info?.next !== null} // Check if there's more data
-          loader={<h4>{t("Loading...")}</h4>} // Loader at the bottom
+          inverse={false} 
+          hasMore={data?.characters?.info?.next !== null} 
+          loader={<h4>{t("Loading...")}</h4>} 
           scrollableTarget="scrollableDiv"
         >
           <table className={styles.table}>
